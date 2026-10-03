@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mis finanzas 💸</title>
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#16a34a"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<style>
+:root{--bg:#f3f6fb;--card:#fff;--tx:#1b2433;--mut:#6b7686;--pri:#16a34a;--red:#e5484d;--bd:#e3e8f0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f141c;--card:#18202b;--tx:#e8edf5;--mut:#93a0b3;--bd:#263140}}
+:root[data-theme="dark"]{--bg:#0f141c;--card:#18202b;--tx:#e8edf5;--mut:#93a0b3;--bd:#263140}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding-bottom:80px}
+main{max-width:640px;margin:auto;padding:14px}
+h1{font-size:22px;margin:4px 0 12px}h3{margin:0 0 10px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.k{color:var(--mut);font-size:12px}.v{font-size:20px;font-weight:700}
+.g{color:var(--pri)}.r{color:var(--red)}
+.seg{display:flex;gap:6px;margin-bottom:10px}
+.seg button{flex:1;padding:9px;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;font:inherit}
+.seg .on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;padding:6px 14px;font-size:16px}
+input,select{width:100%;padding:11px;margin-bottom:8px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font:inherit}
+.b{width:100%;padding:12px;border:0;border-radius:12px;background:var(--pri);color:#fff;font:inherit;font-weight:600;margin-top:4px}
+.b2{background:var(--card);color:var(--tx);border:1px solid var(--bd)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--bd)}
+.row:last-child{border:0}.row small{color:var(--mut);display:block}
+.bar{height:8px;background:var(--bd);border-radius:6px;overflow:hidden;margin-top:5px}.bar i{display:block;height:100%;border-radius:6px}
+.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--bd);display:flex;padding-bottom:env(safe-area-inset-bottom,0px)}
+.tabs button{flex:1;border:0;background:none;color:var(--mut);padding:9px 0;font-size:11px}.tabs b{display:block;font-size:19px;font-weight:400}.tabs .on{color:var(--pri);font-weight:700}
+.fab{position:fixed;right:16px;bottom:calc(72px + env(safe-area-inset-bottom,0px));width:56px;height:56px;border-radius:50%;border:0;background:var(--pri);color:#fff;font-size:30px;box-shadow:0 4px 14px #0004}
+#m{display:none;position:fixed;inset:0;background:#0007;z-index:9;align-items:flex-end}#m.show{display:flex}
+.sheet{background:var(--card);width:100%;max-width:640px;margin:auto;border-radius:20px 20px 0 0;padding:18px;max-height:90%;overflow:auto}
+pre{white-space:pre-wrap;font:inherit;background:var(--bg);padding:12px;border-radius:10px}
+.donut{width:120px;height:120px;border-radius:50%;flex:none;position:relative}.donut:after{content:"";position:absolute;inset:26px;background:var(--card);border-radius:50%}
+.flex{display:flex;gap:14px;align-items:center}.warn{background:#f59e0b22;border:1px solid #f59e0b;padding:8px 10px;border-radius:10px;margin-bottom:6px;font-size:13px}
+.x{border:0;background:none;color:var(--mut);font-size:18px}.empty{color:var(--mut);text-align:center;padding:18px}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:600px}th,td{padding:8px;border-bottom:1px solid var(--bd);text-align:left}th{color:var(--mut);font-size:11px}tfoot td{font-weight:700}.tabs{overflow-x:auto}.tabs button{flex:0 0 auto;min-width:78px}textarea{font:inherit;padding:8px}
+</style></head><body>
+<main id="app"></main>
+<button class="fab" onclick="menu()">+</button>
+<nav class="tabs" id="tabs"></nav>
+<div id="m" onclick="if(event.target==this)closeM()"></div>
+<script>
+const $=s=>document.querySelector(s);
+const E=['🍔 Comida','🚌 Transporte','🏠 Vivienda','💡 Servicios','🛒 Mercado','🎉 Ocio','💊 Salud','📚 Educación','👕 Ropa','📦 Otros'];
+const I=['💼 Salario','💰 Ingreso extra','🎁 Otro ingreso'];
+const COL=['#16a34a','#3b82f6','#f59e0b','#ef4444','#8b5cf6','#06b6d4','#ec4899','#84cc16','#f97316','#64748b'];
+const MS=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const D0=()=>({tx:[],bud:{},cur:'$',freq:'week',last:'',me:{},goals:[],debts:[],pin:'',theme:'',seen:0});let S=D0(),LK=0,EID=0,bf='all',tab='home',P='month',ref=new Date(),q='',ty='g';
+try{Object.assign(S,JSON.parse(localStorage.getItem('mf')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('mf',JSON.stringify(S))}catch(e){}};
+const pad=n=>String(n).padStart(2,'0'),iso=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const f=n=>(n<0?'-':'')+S.cur+Math.round(Math.abs(n)).toLocaleString('es');
+function rng(p,d){const y=d.getFullYear(),m=d.getMonth(),x=d.getDate(),l=new Date(y,m+1,0).getDate();
+if(p=='week'){const s=new Date(y,m,x-(d.getDay()+6)%7);return[iso(s),iso(new Date(s.getFullYear(),s.getMonth(),s.getDate()+6))]}
+if(p=='fort')return x<=15?[iso(new Date(y,m,1)),iso(new Date(y,m,15))]:[iso(new Date(y,m,16)),iso(new Date(y,m,l))];
+return[iso(new Date(y,m,1)),iso(new Date(y,m,l))]}
+function shift(p,d,k){const y=d.getFullYear(),m=d.getMonth(),x=d.getDate();
+if(p=='week')return new Date(y,m,x+7*k);if(p=='month')return new Date(y,m+k,1);
+if(k>0)return x<=15?new Date(y,m,16):new Date(y,m+1,1);return x>=16?new Date(y,m,1):new Date(y,m-1,16)}
+const inR=(t,r)=>t.d>=r[0]&&t.d<=r[1];
+const sum=(a,t)=>a.filter(x=>x.t==t).reduce((s,x)=>s+x.a,0);
+const cats=a=>Object.entries(a.filter(x=>x.t=='g').reduce((o,x)=>(o[x.c]=(o[x.c]||0)+x.a,o),{})).sort((x,y)=>y[1]-x[1]);
+const lab=r=>{const a=r[0].split('-'),b=r[1].split('-');return +a[2]+' '+MS[a[1]-1]+' – '+(+b[2])+' '+MS[b[1]-1]+' '+b[0]};
+const col=c=>COL[Math.max(0,E.indexOf(c))];
+function rep(r,t){const a=S.tx.filter(x=>inR(x,r)),i=sum(a,'i'),g=sum(a,'g'),c=cats(a);
+return t+' ('+lab(r)+')\n💰 Cobrado: '+f(i)+'\n💸 Gastos: '+f(g)+'\n✅ Saldo disponible: '+f(i-g)+(c[0]?'\n🔥 Más gastado: '+c[0][0]+' ('+f(c[0][1])+')':'')+(c.length>1?'\n🪙 Menos gastado: '+c[c.length-1][0]+' ('+f(c[c.length-1][1])+')':'')+'\n🧾 Movimientos: '+a.length}
+function notify(t){try{if('Notification' in window&&Notification.permission=='granted')new Notification('Mis finanzas 💸',{body:t})}catch(e){}}
+const FN={week:'Resumen semanal',fort:'Resumen quincenal',month:'Resumen del mes'};
+function auto(){const r=rng(S.freq,shift(S.freq,new Date(),-1));
+if(S.last!=r[0]&&S.tx.some(x=>inR(x,r))){S.last=r[0];save();const t=rep(r,FN[S.freq]);notify(t);modal('<h3>📬 Tu resumen</h3><pre>'+esc(t)+'</pre><button class="b" onclick="closeM()">Listo</button>')}}
+function modal(h){$('#m').innerHTML='<div class="sheet">'+h+'</div>';$('#m').className='show'}
+function closeM(){if(!LK)$('#m').className=''}
+function info(t){modal('<h3>'+t+'</h3><button class="b" onclick="closeM()">OK</button>')}
+function ask(m,c){modal('<h3>'+m+'</h3><div class="grid"><button class="b b2" onclick="closeM()">Cancelar</button><button class="b" style="background:var(--red)" onclick="closeM();'+c+'">Confirmar</button></div>')}
+function add(){EID=0;modal(`<h3>Nuevo movimiento</h3><div class="seg"><button id="tg" onclick="setT('g')">💸 Gasto</button><button id="ti" onclick="setT('i')">💰 Ingreso</button></div><input id="fn" placeholder="Nombre (ej. Almuerzo)"><input id="fa" type="number" inputmode="decimal" placeholder="Monto"><select id="fc"></select><select id="fp">${['Efectivo','Transferencia','Débito','Crédito','PayPal','Otros'].map(m=>`<option>${m}</option>`).join('')}</select><input id="fd" type="date" value="${iso(new Date())}"><input id="fo" placeholder="Nota (opcional)"><button class="b" onclick="saveTx()">Guardar</button>`);setT('g')}
+function setT(t){ty=t;$('#tg').classList.toggle('on',t=='g');$('#ti').classList.toggle('on',t=='i');$('#fc').innerHTML=(t=='g'?E:I).map(c=>`<option>${c}</option>`).join('')}
+function saveTx(){const n=$('#fn').value.trim(),a=parseFloat($('#fa').value);if(!n||!(a>0)){$('#fn').focus();return}
+const o={t:ty,n,a,c:$('#fc').value,m:$('#fp').value,d:$('#fd').value||iso(new Date()),o:$('#fo').value.trim()};
+if(EID)Object.assign(S.tx.find(x=>x.id==EID),o);else S.tx.push({id:Date.now(),h:new Date().toTimeString().slice(0,5),...o});EID=0;save();closeM();render()}
+function del(id){ask('¿Eliminar este movimiento?','delOk('+id+')')}
+function delOk(id){const x=S.tx.find(y=>y.id==id);if(x&&x.gid){const g=S.goals.find(y=>y.id==x.gid);if(g)g.c-=x.a}if(x&&x.did){const d=S.debts.find(y=>y.id==x.did);if(d)d.p-=x.a}S.tx=S.tx.filter(y=>y.id!=id);save();render()}
+function bars(c,max){return c.map(([n,v])=>`<div style="margin:8px 0"><div class="row" style="padding:0;border:0"><span>${esc(n)}</span><b>${f(v)}</b></div><div class="bar"><i style="width:${max?v/max*100:0}%;background:${col(n)}"></i></div></div>`).join('')}
+function rows(a){return a.length?a.map(x=>`<div class="row"><div><b>${esc(x.n)}</b><small>${esc(x.c)} · ${x.d.slice(8)} ${MS[+x.d.slice(5,7)-1]}${x.o?' · '+esc(x.o):''}</small></div><div><b class="${x.t=='i'?'g':x.t=='a'?'':'r'}">${x.t=='i'?'+':'-'}${f(x.a)}</b> <button class="x" onclick="del(${x.id})">✕</button></div></div>`).join(''):'<div class="empty">Sin movimientos aquí todavía. Toca + para agregar.</div>'}
+function per(){const r=rng(P,ref);return`<div class="seg">${[['week','Semana'],['fort','Quincena'],['month','Mes']].map(([k,n])=>`<button class="${P==k?'on':''}" onclick="P='${k}';ref=new Date();render()">${n}</button>`).join('')}</div><div class="nav"><button onclick="ref=shift(P,ref,-1);render()">‹</button><b>${lab(r)}</b><button onclick="ref=shift(P,ref,1);render()">›</button></div>`}
+function msp(){return Object.fromEntries(cats(S.tx.filter(x=>inR(x,rng('month',new Date())))))}
+function home(){const r=rng(P,ref),a=S.tx.filter(x=>inR(x,r)),i=sum(a,'i'),g=sum(a,'g'),c=cats(a),ah=sum(a,'a'),tot=sum(S.tx,'i')-sum(S.tx,'g')-sum(S.tx,'a'),sp=msp();
+const al=E.filter(k=>S.bud[k]>0&&(sp[k]||0)>=S.bud[k]*.8).map(k=>`<div class="warn">${(sp[k]||0)>=S.bud[k]?'🚨 Te pasaste en':'⚠️ Vas al '+Math.round(sp[k]/S.bud[k]*100)+'% en'} ${esc(k)} (${f(sp[k])} de ${f(S.bud[k])})</div>`).join('');
+let acc=0;const dn=c.length?'conic-gradient('+c.map(([n,v])=>{const s=acc;acc+=v/g*100;return col(n)+' '+s+'% '+acc+'%'}).join(',')+')':'var(--bd)';
+return`<h1>Mis finanzas 💸</h1>${S.me.n?`<div class="k" style="margin:-8px 0 8px">👤 ${esc(S.me.n)}</div>`:''}${per()}<div class="grid"><div class="card"><div class="k">💰 Cobrado</div><div class="v g">${f(i)}</div></div><div class="card"><div class="k">💸 Gastado</div><div class="v r">${f(g)}</div></div><div class="card"><div class="k">✅ Saldo del período</div><div class="v ${i-g-ah<0?'r':''}">${f(i-g-ah)}</div></div><div class="card"><div class="k">🏦 Saldo total disponible</div><div class="v ${tot<0?'r':''}">${f(tot)}</div></div><div class="card"><div class="k">🏦 Ahorros</div><div class="v">${f(S.goals.reduce((s,x)=>s+x.c,0))}</div></div><div class="card"><div class="k">💳 Deudas pendientes</div><div class="v r">${f(S.debts.reduce((s,x)=>s+x.o-x.p,0))}</div></div></div>${al}
+<div class="card"><h3>¿En qué se va tu plata?</h3>${c.length?`<div class="flex"><div class="donut" style="background:${dn}"></div><div style="flex:1">${c.slice(0,4).map(([n,v])=>`<div class="row" style="padding:4px 0;border:0"><span style="color:${col(n)}">●</span><span style="flex:1">${esc(n)}</span><b>${Math.round(v/g*100)}%</b></div>`).join('')}</div></div>`:'<div class="empty">Aún no hay gastos en este período</div>'}</div>
+<div class="card"><h3>Últimos movimientos</h3>${rows([...a].sort((x,y)=>y.id-x.id).slice(0,5))}</div>
+<button class="b b2" onclick="modal('<h3>📬 Resumen</h3><pre>'+esc(rep(rng(P,ref),FN[P]))+'</pre><button class=\\'b\\' onclick=closeM()>Cerrar</button>')">📬 Ver resumen de este período</button>`}
+function mov(){const r=rng(P,ref);let a=S.tx.filter(x=>inR(x,r)&&(x.n+x.c+x.o).toLowerCase().includes(q.toLowerCase())).sort((x,y)=>y.d.localeCompare(x.d)||y.id-x.id);
+return`<h1>🧾 Movimientos</h1>${per()}<input placeholder="🔎 Buscar por nombre o categoría" value="${esc(q)}" oninput="q=this.value;$('#list').innerHTML=rows(S.tx.filter(x=>inR(x,rng(P,ref))&&(x.n+x.c+x.o).toLowerCase().includes(q.toLowerCase())).sort((x,y)=>y.d.localeCompare(x.d)||y.id-x.id))"><div class="card" id="list">${rows(a)}</div>`}
+function ana(){const r=rng(P,ref),a=S.tx.filter(x=>inR(x,r)),g=sum(a,'g'),c=cats(a),pa=S.tx.filter(x=>inR(x,rng(P,shift(P,ref,-1)))),pg=sum(pa,'g');
+const top=a.filter(x=>x.t=='g').sort((x,y)=>y.a-x.a).slice(0,5),days=Math.max(1,Math.round((new Date(r[1])-new Date(r[0]))/864e5)+1),dd=a.filter(x=>x.t=='g').reduce((o,x)=>(o[x.d]=(o[x.d]||0)+x.a,o),{}),bd=Object.entries(dd).sort((x,y)=>y[1]-x[1])[0];
+return`<h1>📊 Análisis</h1>${per()}${ins()}${c.length?`<div class="card"><h3>Ranking por categoría</h3>${bars(c,c[0][1])}<p class="k">🔥 Más: <b>${esc(c[0][0])}</b> · 🪙 Menos: <b>${esc(c[c.length-1][0])}</b></p></div>
+<div class="card"><h3>Tus 5 gastos más grandes</h3>${rows(top)}</div><div class="grid"><div class="card"><div class="k">Promedio diario</div><div class="v">${f(g/days)}</div></div><div class="card"><div class="k">Día de más gasto</div><div class="v">${bd?bd[0].slice(8)+' '+MS[+bd[0].slice(5,7)-1]:'-'}</div><div class="k">${bd?f(bd[1]):''}</div></div></div>
+<div class="card"><div class="k">Vs. período anterior (${f(pg)})</div><div class="v ${g>pg?'r':'g'}">${pg?(g>pg?'▲ ':'▼ ')+Math.abs(Math.round((g-pg)/pg*100))+'%':'Sin datos previos'}</div></div>`:'<div class="card empty">Registra gastos para ver tu análisis</div>'}`}
+function bud(){const sp=msp(),tl=E.reduce((s,k)=>s+(S.bud[k]||0),0),ts=Object.values(sp).reduce((s,v)=>s+v,0);
+return`<h1>🎯 Presupuesto mensual</h1><div class="card"><div class="k">Total presupuestado vs gastado este mes</div><div class="v">${f(ts)} / ${f(tl)}</div><div class="bar"><i style="width:${tl?Math.min(100,ts/tl*100):0}%;background:${ts>tl&&tl?'var(--red)':'var(--pri)'}"></i></div></div>${E.map(k=>{const l=S.bud[k]||0,s=sp[k]||0,p=l?s/l*100:0;return`<div class="card"><div class="row" style="padding:0;border:0"><b>${esc(k)}</b><span class="k">gastado ${f(s)}</span></div><input type="number" inputmode="decimal" placeholder="Límite mensual" value="${l||''}" onchange="S.bud['${k}']=parseFloat(this.value)||0;save();render()" style="margin:8px 0 0"><div class="bar"><i style="width:${Math.min(100,p)}%;background:${p>=100?'var(--red)':p>=80?'#f59e0b':'var(--pri)'}"></i></div></div>`}).join('')}`}
+function set(){return`<h1>⚙️ Ajustes</h1>${prof()}<div class="card"><h3>📬 Resúmenes automáticos</h3><p class="k">Al abrir la app te muestro el resumen del último período cerrado.</p><select onchange="S.freq=this.value;S.last='';save()">${[['week','Cada semana'],['fort','Cada quincena'],['month','Fin de mes']].map(([k,n])=>`<option value="${k}" ${S.freq==k?'selected':''}>${n}</option>`).join('')}</select><button class="b" onclick="try{Notification.requestPermission().then(p=>info(p=='granted'?'Notificaciones activadas ✅':'Permiso no concedido'))}catch(e){info('Tu navegador no permite notificaciones')}">🔔 Activar notificaciones del navegador</button></div>
+<div class="card"><h3>💱 Moneda</h3><input value="${esc(S.cur)}" maxlength="4" onchange="S.cur=this.value||'$';save();render()"></div>
+<div class="card"><h3>💾 Datos</h3><button class="b b2" onclick="try{navigator.clipboard.writeText('fecha,tipo,nombre,categoria,monto,nota\\n'+S.tx.map(x=>[x.d,x.t=='g'?'gasto':'ingreso','"'+x.n+'"',x.c,x.a,'"'+x.o+'"'].join(',')).join('\\n')).then(()=>info('CSV copiado, pégalo en Excel o Notas'))}catch(e){info('No se pudo copiar')}">📋 Copiar mis datos (CSV)</button><button class="b b2" style="color:var(--red)" onclick="ask('¿Borrar TODOS tus datos?','wipe()')">🗑️ Borrar todo</button><p class="k">Tus datos se guardan solo en este navegador/dispositivo.</p></div>`}
+
+function wipe(){S=D0();save();render()}
+function theme(){const d=document.documentElement;S.theme=d.dataset.theme=(d.dataset.theme=='dark'||(!d.dataset.theme&&matchMedia('(prefers-color-scheme:dark)').matches))?'light':'dark';save()}
+function edit(id){const x=S.tx.find(y=>y.id==id);add();EID=id;setT(x.t);$('#fn').value=x.n;$('#fa').value=x.a;$('#fc').value=x.c;$('#fd').value=x.d;$('#fo').value=x.o||'';$('#fp').value=x.m||'Efectivo'}
+function menu(){modal('<h3>+ Registrar</h3><div class="grid">'+[['➕ Ingreso',"add();setT('i')"],['➖ Gasto','add()'],['🏦 Ahorro','sv()'],['💳 Deuda','dAdd()'],['🎯 Meta','gAdd()']].map(([n,c])=>`<button class="b b2" onclick="${c}">${n}</button>`).join('')+'</div>')}
+function bit(){const a=S.tx.filter(x=>(bf=='all'||x.t==bf)&&(x.n+x.c+x.o+(x.m||'')).toLowerCase().includes(q.toLowerCase())).sort((x,y)=>y.d.localeCompare(x.d)||y.id-x.id);
+return`<h1>📒 Bitácora</h1><div class="k" style="margin:-8px 0 8px">${S.me.n?'👤 Propietario: <b>'+esc(S.me.n)+'</b>'+(S.me.tel?' · '+esc(S.me.tel):''):'Completa tus datos en ⚙️ Ajustes'}</div><div class="seg">${[['all','Todo'],['g','Gastos'],['i','Ingresos'],['a','Ahorros']].map(([k,n])=>`<button class="${bf==k?'on':''}" onclick="bf='${k}';render()">${n}</button>`).join('')}</div><input placeholder="🔎 Buscar (nombre, categoría, método)" value="${esc(q)}" onchange="q=this.value;render()"><div class="card" style="padding:0;overflow-x:auto"><table><thead><tr><th>#</th><th>Fecha</th><th>Nombre</th><th>Categoría</th><th>Método</th><th>Nota</th><th>Monto</th><th></th></tr></thead><tbody>${a.map((x,n)=>`<tr><td>${a.length-n}</td><td>${x.d.slice(8)}/${x.d.slice(5,7)}/${x.d.slice(2,4)}${x.h?' '+x.h:''}</td><td><b>${esc(x.n)}</b></td><td>${esc(x.c)}</td><td>${esc(x.m||'-')}</td><td>${esc(x.o||'')}</td><td class="${x.t=='i'?'g':x.t=='a'?'':'r'}" style="white-space:nowrap"><b>${x.t=='i'?'+':'-'}${f(x.a)}</b></td><td style="white-space:nowrap">${x.t=='a'?'':`<button class="x" onclick="edit(${x.id})">✏️</button>`}<button class="x" onclick="del(${x.id})">✕</button></td></tr>`).join('')||'<tr><td colspan="8" class="empty">Sin registros</td></tr>'}</tbody><tfoot><tr><td colspan="6">Totales (${a.length} registros)</td><td colspan="2" style="white-space:nowrap"><span class="g">+${f(sum(a,'i'))}</span><br><span class="r">-${f(sum(a,'g')+sum(a,'a'))}</span></td></tr></tfoot></table></div>`}
+function gAdd(){modal('<h3>🎯 Nueva meta</h3><input id="gn" placeholder="Nombre (ej. Computadora)"><input id="gt" type="number" inputmode="decimal" placeholder="Objetivo"><input id="gc" type="number" inputmode="decimal" placeholder="Ahorrado actual (opcional)"><input id="gd" type="date"><select id="gp"><option>Alta</option><option>Media</option><option>Baja</option></select><button class="b" onclick="gSave()">Guardar</button>')}
+function gSave(){const n=$('#gn').value.trim(),t=parseFloat($('#gt').value);if(!n||!(t>0))return $('#gn').focus();S.goals.push({id:Date.now(),n,t,c:parseFloat($('#gc').value)||0,d:$('#gd').value,p:$('#gp').value});save();closeM();tab='meta';render()}
+function gDel(id){S.goals=S.goals.filter(x=>x.id!=id);S.tx=S.tx.filter(x=>x.gid!=id);save();render()}
+function sv(){if(!S.goals.length){gAdd();return}modal('<h3>🏦 Aporte a meta</h3><select id="sg">'+S.goals.map(g=>`<option value="${g.id}">${esc(g.n)}</option>`).join('')+'</select><input id="sa" type="number" inputmode="decimal" placeholder="Monto"><button class="b" onclick="svSave()">Guardar</button>')}
+function ap(id){sv();$('#sg').value=id}
+function svSave(){const g=S.goals.find(x=>x.id==$('#sg').value),a=parseFloat($('#sa').value);if(!g||!(a>0))return;g.c+=a;S.tx.push({id:Date.now(),t:'a',n:'Ahorro: '+g.n,a,c:'🏦 Ahorro',gid:g.id,d:iso(new Date()),o:'',m:'-'});save();closeM();render()}
+function meta(){const T0=new Date(iso(new Date()));
+return`<h1>🎯 Metas y ahorros</h1><div class="card"><div class="k">🏦 Total ahorrado</div><div class="v g">${f(S.goals.reduce((s,x)=>s+x.c,0))}</div></div>`+(S.goals.map(g=>{const p=Math.min(100,g.c/g.t*100),fa=Math.max(0,g.t-g.c),dl=g.d?Math.ceil((new Date(g.d)-T0)/864e5):0;
+return`<div class="card"><div class="row" style="padding:0;border:0"><b>🎯 ${esc(g.n)}</b><span class="k">Prioridad ${g.p}</span></div><div class="k">Meta ${f(g.t)} · Ahorrado ${f(g.c)} · Falta ${f(fa)}</div><div class="bar"><i style="width:${p}%;background:var(--pri)"></i></div><div class="k"><b>${Math.round(p)}%</b>${fa&&dl>0?` · Ahorra ${f(fa/(dl/7))}/semana · ${f(fa/(dl/15))}/quincena · ${f(fa/(dl/30))}/mes`:g.d&&fa?' · Fecha vencida':''}</div><div class="seg" style="margin:8px 0 0"><button onclick="ap(${g.id})">+ Aporte</button><button onclick="ask('¿Eliminar meta y sus aportes?','gDel(${g.id})')">🗑️</button></div></div>`}).join('')||'<div class="card empty">Aún no tienes metas. Toca + → Meta.</div>')+`<div class="card"><h3>🧮 Calculadora de ahorro</h3><input id="c1" type="number" placeholder="Meta" oninput="cc()"><input id="c2" type="number" placeholder="Ahorro actual" oninput="cc()"><input id="c3" type="number" placeholder="Aporte por período" oninput="cc()"><div id="cr" class="k">Ingresa los datos</div></div>`}
+function cc(){const m=+$('#c1').value,a=+$('#c2').value,p=+$('#c3').value;$('#cr').innerHTML=m>a&&p>0?`Necesitas aprox. <b>${Math.ceil((m-a)/p)}</b> períodos de aporte`:m&&m<=a?'¡Ya llegaste a la meta! 🎉':'Ingresa los datos'}
+function dAdd(){modal('<h3>💳 Nueva deuda</h3><input id="dn" placeholder="Nombre"><input id="dc" placeholder="Acreedor"><input id="do" type="number" inputmode="decimal" placeholder="Cantidad original"><input id="dp" type="number" inputmode="decimal" placeholder="Ya pagado (opcional)"><input id="dq" type="number" inputmode="decimal" placeholder="Cuota (opcional)"><input id="dr" type="number" inputmode="decimal" placeholder="Interés % (opcional)"><input id="dd" type="date"><button class="b" onclick="dSave()">Guardar</button>')}
+function dSave(){const n=$('#dn').value.trim(),o=parseFloat($('#do').value);if(!n||!(o>0))return $('#dn').focus();S.debts.push({id:Date.now(),n,cr:$('#dc').value.trim(),o,p:Math.min(o,parseFloat($('#dp').value)||0),q:parseFloat($('#dq').value)||0,r:parseFloat($('#dr').value)||0,d:$('#dd').value});save();closeM();tab='deu';render()}
+function pay(id){modal('<h3>💳 Abonar a deuda</h3><input id="pa" type="number" inputmode="decimal" placeholder="Monto"><button class="b" onclick="paySave('+id+')">Guardar</button>')}
+function paySave(id){const d=S.debts.find(x=>x.id==id),a=Math.min(parseFloat($('#pa').value)||0,d.o-d.p);if(!(a>0))return;d.p+=a;S.tx.push({id:Date.now(),t:'g',n:'Pago: '+d.n,a,c:'💳 Deudas',did:id,d:iso(new Date()),o:'',m:'-'});save();closeM();render()}
+function dDel(id){S.debts=S.debts.filter(x=>x.id!=id);save();render()}
+function deu(){const o=S.debts.reduce((s,x)=>s+x.o,0),p=S.debts.reduce((s,x)=>s+x.p,0);
+return`<h1>💳 Deudas</h1><div class="grid"><div class="card"><div class="k">Deuda total</div><div class="v">${f(o)}</div></div><div class="card"><div class="k">Pagado</div><div class="v g">${f(p)}</div></div></div><div class="card"><div class="k">Pendiente</div><div class="v r">${f(o-p)}</div></div>`+(S.debts.map(d=>{const pe=d.o-d.p,st=pe<=0?'🟢 Pagada':d.p>0?'🟡 En proceso':'🔴 Pendiente';
+return`<div class="card"><div class="row" style="padding:0;border:0"><b>${esc(d.n)}</b><span>${st}</span></div><div class="k">${d.cr?esc(d.cr)+' · ':''}Pendiente ${f(pe)} de ${f(d.o)}${d.q?' · Cuota '+f(d.q):''}${d.r?' · '+d.r+'%':''}${d.d?' · Vence '+d.d:''}</div><div class="bar"><i style="width:${d.p/d.o*100}%;background:var(--pri)"></i></div>${d.q&&pe>0?`<div class="k">≈ ${Math.ceil(pe/d.q)} cuotas restantes (sin contar intereses)</div>`:''}<div class="seg" style="margin:8px 0 0">${pe>0?`<button onclick="pay(${d.id})">+ Abonar</button>`:''}<button onclick="ask('¿Eliminar esta deuda?','dDel(${d.id})')">🗑️</button></div></div>`}).join('')||'<div class="card empty">Sin deudas registradas 🎉</div>')}
+function ins(){const r=rng(P,ref),a=S.tx.filter(x=>inR(x,r)),g=sum(a,'g'),c=cats(a),pg=sum(S.tx.filter(x=>inR(x,rng(P,shift(P,ref,-1)))),'g'),L=[],sp=msp(),h=iso(new Date());
+if(c[0])L.push(`${c[0][0]} representa el ${Math.round(c[0][1]/g*100)}% de tus gastos.`);
+if(pg&&g)L.push(`Tus gastos ${g>pg?'aumentaron':'bajaron'} ${Math.abs(Math.round((g-pg)/pg*100))}% respecto al período anterior.`);
+E.forEach(k=>{if(S.bud[k]>0&&sp[k]>S.bud[k])L.push(`Superaste el presupuesto de ${k} en ${f(sp[k]-S.bud[k])}.`)});
+const n=S.debts.filter(d=>d.d&&d.p<d.o&&d.d>=h&&d.d<=iso(new Date(Date.now()+7*864e5))).length;if(n)L.push(`Tienes ${n} deuda(s) con vencimiento en los próximos 7 días.`);
+return`<div class="card"><h3>💡 Insights</h3>${L.length?L.map(x=>`<div class="row">${esc(x)}</div>`).join(''):'<div class="empty">Registra más movimientos para ver insights</div>'}</div>`}
+function prof(){const m=S.me,fl=(k,p)=>`<input placeholder="${p}" value="${esc(m[k]||'')}" onchange="S.me['${k}']=this.value;save()">`;
+return`<div class="card"><h3>📲 Descargar app</h3><p class="k">Instálala en tu celular como una app, con ícono propio.</p><button class="b" onclick="inst()">Instalar Mis finanzas 💸</button></div><div class="card"><h3>👤 Propietario</h3>${fl('n','Nombre completo')}${fl('tel','Teléfono')}${fl('em','Correo')}${fl('ci','Ciudad / País')}${fl('pay','Día de pago (ej. 15 y 30)')}${fl('inc','Ingreso habitual')}${fl('sg','Meta de ahorro')}<button class="b b2" onclick="theme()">🌞 / 🌙 Modo claro u oscuro</button></div><div class="card"><h3>🔒 PIN de acceso</h3><p class="k">Bloqueo básico en este dispositivo.</p><input id="pn" type="password" inputmode="numeric" placeholder="Nuevo PIN (4+ dígitos)"><button class="b" onclick="setPin()">Guardar PIN</button>${S.pin?'<button class="b b2" onclick="S.pin=\'\';save();render()">Quitar PIN</button>':''}</div><div class="card"><h3>💾 Respaldo</h3><button class="b b2" onclick="try{navigator.clipboard.writeText(JSON.stringify(S)).then(()=>info('Respaldo copiado ✅'))}catch(e){info('No se pudo copiar')}">Copiar respaldo</button><textarea id="bk" placeholder="Pega aquí tu respaldo para restaurar" style="width:100%;height:70px;margin-top:8px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);color:var(--tx)"></textarea><button class="b" onclick="try{S=Object.assign(D0(),JSON.parse($('#bk').value));save();render();info('Restaurado ✅')}catch(e){info('Respaldo inválido')}">Restaurar</button><button class="b b2" onclick="demo()">Cargar datos de ejemplo</button></div>`}
+let DP;addEventListener('beforeinstallprompt',e=>{e.preventDefault();DP=e});
+function inst(){if(DP){DP.prompt();DP=null}else info('Chrome: menú ⋮ → Instalar app. iPhone (Safari): Compartir → Añadir a inicio')}
+function setPin(){if($('#pn').value.length>3){S.pin=$('#pn').value;save();info('PIN guardado ✅')}}
+function unlock(){if($('#lk').value==S.pin){LK=0;closeM();auto()}else{$('#lk').value='';$('#lk').placeholder='PIN incorrecto'}}
+function demo(){const d=n=>iso(new Date(Date.now()-n*864e5));let i=0;
+[['i','Salario',1200,'💼 Salario',20,'Transferencia'],['i','Venta extra',150,'💰 Ingreso extra',9,'Efectivo'],['g','Almuerzo',4.5,'🍔 Comida',0,'Efectivo'],['g','Pasaje',2,'🚌 Transporte',1,'Efectivo'],['g','Mercado semanal',55,'🛒 Mercado',2,'Débito'],['g','Internet',30,'💡 Servicios',4,'Transferencia'],['g','Cine',12,'🎉 Ocio',5,'Crédito'],['g','Farmacia',18,'💊 Salud',7,'Efectivo'],['g','Renta',250,'🏠 Vivienda',10,'Transferencia'],['g','Gasolina',40,'🚌 Transporte',12,'Efectivo'],['g','Zapatos',45,'👕 Ropa',15,'Débito']].forEach(([t,n,a,c,k,m])=>S.tx.push({id:Date.now()+i++,t,n,a,c,d:d(k),m,o:''}));
+S.tx.push({id:Date.now()+99,t:'a',n:'Ahorro: Computadora',a:120,c:'🏦 Ahorro',gid:1,d:d(3),o:'',m:'-'});
+S.bud={'🍔 Comida':80,'🚌 Transporte':50,'🎉 Ocio':30,'🛒 Mercado':100};
+S.goals.push({id:1,n:'Computadora',t:800,c:120,d:iso(new Date(Date.now()+180*864e5)),p:'Alta'});
+S.debts.push({id:2,n:'Préstamo moto',cr:'Banco',o:600,p:100,q:50,r:0,d:iso(new Date(Date.now()+5*864e5))});
+S.seen=1;save();closeM();tab='home';render()}
+const V={home,bit,mov,ana,meta,deu,bud,set},T=[['home','🏠','Inicio'],['bit','📒','Bitácora'],['mov','🧾','Períodos'],['ana','📊','Análisis'],['meta','🎯','Metas'],['deu','💳','Deudas'],['bud','💰','Presupuesto'],['set','⚙️','Ajustes']];
+function render(){$('#app').innerHTML=V[tab]();$('#tabs').innerHTML=T.map(([k,i,n])=>`<button class="${tab==k?'on':''}" onclick="tab='${k}';render();scrollTo(0,0)"><b>${i}</b>${n}</button>`).join('')}
+if(S.theme)document.documentElement.dataset.theme=S.theme;
+try{navigator.serviceWorker.register('sw.js')}catch(e){}
+render();
+if(S.pin){LK=1;modal('<h3>🔒 Ingresa tu PIN</h3><input id="lk" type="password" inputmode="numeric"><button class="b" onclick="unlock()">Entrar</button>')}
+else if(!S.seen&&!S.tx.length){S.seen=1;save();modal('<h3>👋 Bienvenido a Mis finanzas 💸</h3><button class="b" onclick="demo()">Cargar datos de ejemplo</button><button class="b b2" onclick="closeM()">Empezar desde cero</button>')}
+else auto();
+</script></body></html>
